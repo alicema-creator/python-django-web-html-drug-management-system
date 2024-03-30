@@ -1,0 +1,262 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!--    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap_page.min.css' %}" rel="external nofollow" >
+    <link rel="stylesheet" href="{% static 'booksales/economics.css' %}" rel="external nofollow" >
+
+    <title>xxxxxx</title>
+    <base target=_blank>
+
+    <style>
+
+        #inputT {
+            font-family: "Microsoft YaHei";
+            font-size:20px;
+            display: inline-block;
+            margin-left: 30px;
+            margin-top: -20px;
+            border-style: none;
+            /*background-color:  rgb(63,227,225);*/
+            width: 100px;
+
+        }
+
+        #inputT:hover {
+            width: 100px;
+            background-color: rgb(255,68,0);
+    }
+    </style>
+
+</head>
+
+<body>
+<DIV ID="outermostframe">
+    <div style="width: 100%; display: flex; justify-content: space-between;background-color:#3FE3E1" >
+        <a style="margin-left: 20px;padding: 10px;  color: #333; text-decoration: none;">欢迎光临</a>
+        <div style="float: right;display: flex;justify-content: right;">
+            <a id="loginS" style="margin-right: 20px;padding: 10px;  color: #333; text-decoration: none;" href="/accounts/logout/" >当前用户名：{{user}}</a>
+            <a style="margin-right: 20px;padding: 10px;  color: #333; text-decoration: none;" href="/accounts/logout/">注销</a>
+            <a style="margin-right: 20px;padding: 10px;  color: #333; text-decoration: none;" href="/accounts/login/">登录</a>
+        </div>
+    </div>
+
+    <div style="background-color: green;height:300px; text-align: center;">
+        <div style="padding-top:60px">
+		<form id="pointsForm" action="" method="post"  enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="webAddress" placeholder="输入网址"  style="width: 320px;" value="http://m.nmc.cn/"/>
+            <!-- 添加一个隐藏的输入字段用于存储当前用户名 -->
+            <input type="hidden" name="username" value={{user}} />
+            <input type="submit" value="开始检测">
+        </form>
+        </div>
+    </div>
+
+
+    <div >
+<!--        <div >-->
+<!--            {% for ii in page_object %}-->
+<!--            <form style="margin-top: 0px;display: inline-block;" action="" method="post" enctype="multipart/form-data">-->
+<!--                {% csrf_token %}-->
+<!--                <div class="mouse">-->
+<!--                    <p >{{ ii.category }} </p>-->
+<!--                    <p >{{ ii.title }} </p>-->
+<!--                    <p >{{ ii.data1 }}</p>-->
+<!--                    <p >{{ ii.data2 }}</p>-->
+<!--                    <p >{{ ii.data3 }}</p>-->
+
+<!--                </div>-->
+<!--            </form>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+
+        <div>
+            <table style="background-color: cyan; width: 100%;">
+                <thead>
+                    <tr>
+                        <th>类目</th>
+                        <th>标题</th>
+                        <th>编码</th>
+                        <th>状态</th>
+                        <th>技术</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ii in page_object %}
+                    <tr>
+                        <td>{{ ii.category }}</td>
+                        <td>{{ ii.title }}</td>
+                        <td>{{ ii.data1 }}</td>
+                        <td>{{ ii.data2 }}</td>
+                        <td>{{ ii.data3 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <!--分页***************************************分页-->
+        <div style="">
+            {% if is_paginated %}
+                    <ul class="pagination pull-right" id="myPage">
+                        {% endif %}
+
+                        {#上一页按钮开始#}
+                        {# 如果当前页有上一页#}
+                        {% if page_object.has_previous %}
+                            {#  当前页的上一页按钮正常使用#}
+                            <li class="previous"><a href="?page={{ page_object.previous_page_number }}">上一页</a></li>
+                        {% else %}
+                            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+                            <li class="previous disabled"><a href="#">上一页</a></li>
+                        {% endif %}
+                        {#上一页按钮结束#}
+                        {% if data.first %}
+                            <li class="page"><a href="?page=1">1</a></li>
+                        {% endif %}
+                        {% if data.left %}
+                            {% if data.left_has_more %}
+                                <li class="page"><a href="javascript:void(0)">...</a></li>
+                            {% endif %}
+                            {% for i in data.left %}
+                                <li class="page"><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="page active" ><a href="javascript:void(0)"> {{ page_num }}</a></li>
+                        {% if data.right %}
+                            {% for i in data.right %}
+                                <li class="page"><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endfor %}
+                            {% if data.right_has_more %}
+                                <li class="page"><a href="javascript:void(0)">...</a></li>
+                            {% endif %}
+                        {% endif %}
+                        {% if data.last %}
+                            <li class="page"><a
+                                    href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                            </li>
+
+                        {% endif %}
+                        {% if page_object.has_next %}
+                            <li class="next"><a href="?page={{ page_object.next_page_number }}">下一页</a></li>
+                        {% else %}
+                            <li class="next disabled"><a href="#">下一页</a></li>
+                        {% endif %}
+                        {# 下一页按钮结束#}
+
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">原始</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">切换下拉菜单</span>
+                            </button>
+
+                            <ul class="dropdown-menu" role="menu" style="width: 20px">
+                                    {% for i in paginator.page_range %}
+                                        <li class="page"><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endfor %}
+                            </ul>
+
+                        </div>
+
+                    </ul>
+        </div>
+    </div>
+
+
+
+    <div style="background:rgb(32,32,32);width:1220px;height:90px; margin-top:300px;position: relative;text-align:center;padding-top: 10px">
+          <P style="line-height:30px;font-size:13px;font:Microsoft YaHei;font-weight:normal;color:rgb(175,177,177); ">电话：xxxxxx    邮箱: xxxxxx </P>
+          <P style="line-height:30px;font-size:13px;font:Microsoft YaHei;font-weight:normal;color:rgb(175,177,177); ">版权所有 ©xxxxxx</P>
+    </div>
+
+</DIV>
+
+
+<script>
+    var loginStatus = '{{user}}';
+    console.log(loginStatus);
+    if (loginStatus === "AnonymousUser") {
+        var loginST = document.getElementById("loginS");
+        loginS.innerHTML = "未登录";
+    }
+</script>
+
+
+
+<script>
+    var links = document.querySelectorAll('.my-link');
+    for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止默认行为，不跳转链接
+        console.log(this.innerText); // 获取a标签中的文字并打印到控制台
+
+        var linkText = this.innerText;
+        for (var j = 0; j < links.length; j++) {
+            links[j].style.backgroundColor = ''; // 将所有链接的背景颜色设置为空
+        }
+
+    if ((this.innerText) === "首页") {
+        this.style.backgroundColor = 'rgb(255,68,0)';
+    }
+
+    if ((this.innerText) === "经济学") {
+        this.style.backgroundColor = 'rgb(255,68,0)';
+    }
+
+    if ((this.innerText) === "推理学") {
+        this.style.backgroundColor = 'rgb(255,68,0)';
+    }
+
+    if ((this.innerText) === "心里学") {
+        this.style.backgroundColor = 'rgb(255,68,0)';
+    }
+
+    if ((this.innerText) === "历史名著") {
+        this.style.backgroundColor = 'rgb(255,68,0)';
+    }
+
+
+    });
+  }
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    $('.my-link').click(function(event) {
+      event.preventDefault(); // 阻止默认行为，不跳转链接
+      var linkText2 = $(this).data('text');
+      console.log('linkText2：' + linkText2);
+      $.ajax({
+        type: 'POST',
+        url: '', // 修改为你的 Django 视图函数 URL
+        data: { text: linkText2 },
+        success: function(data) {
+          console.log('成功发送数据：' + linkText2);
+
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+</body>
+</html>
