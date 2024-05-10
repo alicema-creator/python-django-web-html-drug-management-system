@@ -16,6 +16,8 @@
 <img src="https://github.com/alicema-creator/python-django-web-html-drug-management-system/blob/main/screenshot/1.png" width="500"></a>
 <img src="https://github.com/alicema-creator/python-django-web-html-drug-management-system/blob/main/screenshot/2.png" width="500"></a>
 
+## 原理图
+<img src="https://github.com/alicema-creator/python-django-web-html-drug-management-system/blob/main/screenshot/55.png" width="500"></a>
 
 ## 在线协助
 **如需安装运行环境或远程调试，可扫码或直接加QQ:2945218359, QQ:905733049由专业技术人员远程协助！**  
